@@ -7,13 +7,6 @@
 #include <unistd.h>
 #include <vector>
 
-/*
- * Code du client
- */
-
-#define SIZE 100
-#define PORT 9600
-
 #define BOLD "1"
 
 #define DEFAULT "0"
@@ -45,6 +38,13 @@ void printError(const std::vector<ColoredText> &parts) {
 void printError(const std::string &errorMessage) {
   printError({{errorMessage, DEFAULT}});
 }
+
+/*
+ * Code du client
+ */
+
+#define SIZE 100
+#define PORT 9600
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
