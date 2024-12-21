@@ -8,15 +8,6 @@
 #include <unistd.h>
 #include <vector>
 
-/*
- * Code du serveur
- */
-
-/* Port local du serveur */
-#define PORT 9600
-#define IP_ADRESS "127.0.0.1"
-#define MAX_RECEPTION_SIZE 2048 // octets
-
 #define BOLD "1"
 
 #define DEFAULT "0"
@@ -49,6 +40,15 @@ void printError(const std::string &errorMessage) {
   printError({{errorMessage, DEFAULT}});
 }
 
+/*
+ * Code du serveur
+ */
+
+/* Port local du serveur */
+#define PORT 9600
+#define IP_ADRESS "127.0.0.1"
+#define MAX_RECEPTION_SIZE 2048 // octets
+
 int main(int argc, char *argv[]) {
 
   printColoredParts({{"Information sur le serveur", BLUE}});
@@ -67,15 +67,11 @@ int main(int argc, char *argv[]) {
    *
    */
 
-  // Protocole IP, socket orienté datagramme, 0 car SOCK_DGRAM correspond à UDP
   int sockfd;
-
-  // structure d'adresse serveur / client
-  struct sockaddr_in server_adress, client_adress;
+  struct sockaddr_in server_adress, client_adress; // structure d'adresse serveur / client
 
   // type int non compatible pour l'appel de recvfrom
-  socklen_t client_adress_length =
-      sizeof(client_adress); // Taille de l'@ du client
+  socklen_t client_adress_length = sizeof(client_adress); // Taille de l'@ du client
 
   /*
    * Code du serveur
@@ -90,6 +86,7 @@ int main(int argc, char *argv[]) {
    */
 
   // Ouverture socket réseau
+  // Protocole IP, socket orienté datagramme, 0 car SOCK_DGRAM correspond à UDP
   sockfd = socket(PF_INET, SOCK_DGRAM, 0);
 
   if (sockfd == -1) {
@@ -101,10 +98,8 @@ int main(int argc, char *argv[]) {
 
   // Remplir structure d'adresse locale
   server_adress.sin_family = AF_INET;
-  server_adress.sin_port =
-      htons(PORT); // conversion int vers type compatible modèle IP
-  server_adress.sin_addr.s_addr =
-      inet_addr(IP_ADRESS); // conversion string vers type compatible modèle IP
+  server_adress.sin_port = htons(PORT); // conversion int vers type compatible modèle IP
+  server_adress.sin_addr.s_addr = inet_addr(IP_ADRESS); // conversion string vers type compatible modèle IP
 
   // on cast server_adress en sockaddr
   if (bind(sockfd, reinterpret_cast<struct sockaddr *>(&server_adress),
@@ -133,24 +128,17 @@ int main(int argc, char *argv[]) {
     buffer[bytes_received] = '\0'; // caractère nul (fin de chaîne)
 
     char client_ip[INET_ADDRSTRLEN]; // adresse IP en format texte
-    std::string client_info;
 
-    client_info =
-        inet_ntop(AF_INET, &(client_adress.sin_addr), client_ip,
-                  INET_ADDRSTRLEN); // Convertit l'adresse ip binaire en texte
-    client_info +=
-        ":" +
-        std::to_string(ntohs(client_adress.sin_port)); // Convertit le port
+    std::string client_info = inet_ntop(AF_INET, &(client_adress.sin_addr), client_ip, INET_ADDRSTRLEN); // Convertit l'adresse ip binaire en texte
+    client_info += ":" + std::to_string(ntohs(client_adress.sin_port)); // Convertit le port
 
     // Affichage des données
-
-    std::string message =
-        "Données reçues (" + std::to_string(bytes_received) + " octets) :";
+    std::string message = "Données reçues de " + client_info + " (" + std::to_string(bytes_received) + " octets) :";
     printColoredParts({{message, GREEN}});
 
-    ssize_t ret_of_write = write(STDOUT_FILENO, buffer, bytes_received);
+    ssize_t bytes_sent = write(STDOUT_FILENO, buffer, bytes_received);
 
-    if (ret_of_write == -1) {
+    if (bytes_sent == -1) {
       printError("Échec lors de l'affichage des données.");
       close(sockfd);
       return -1;
