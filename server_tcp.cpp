@@ -116,8 +116,6 @@ int main(int argc, char *argv[]) {
        close(sockfd);
    }
 
-   printColoredParts({{"Socket fermé avec succès.", GREEN}});
-
   while (1) {
       int client_socket = accept(sockfd, (struct sockaddr *) &client_adress, &client_adress_length);
       char client_ip[INET_ADDRSTRLEN]; // adresse IP en format texte
