@@ -48,7 +48,7 @@ void printError(const std::string &errorMessage) {
 #define PORT 9600
 #define IP_ADRESS "127.0.0.1"
 #define MAXIMUM_OF_CONNEXIONS 128 // Avant de refuser les autres connexions
-#define MAX_RECEPTION_SIZE 2048 // octets
+#define MAX_RECEPTION_SIZE 20 // 20 caractères maximum
 
 int main(int argc, char *argv[]) {
 
