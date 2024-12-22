@@ -1,14 +1,24 @@
 # CProtocol-UDP-TCP
-Basic implementation in C of a client-server interface for the UDP / TCP protocols as part of a study project in L2 Computer Science.
+
+**Objectif du TP** : Développer une communication rudimentaire entre deux processus, en adoptant une architecture de type client/serveur. La communication entre le client et le serveur se fera en utilisant l'interface de communication des sockets.
 
 ## Compilation :
 ```bash
-$ g++ -o out/server_udp client_udp.cpp
-$ g++ -o out/client_udp client_udp.cpp
+# UDP Client / Server
+g++ -o out/server_udp server_udp.cpp
+g++ -o out/client_udp client_udp.cpp
+
+# TCP Client / Server
+g++ -o out/server_tcp server_tcp.cpp
+g++ -o out/client_tcp client_tcp.cpp
 ```
 
-## Usage :
+## Utilisation :
 ```bash
-$ ./server_udp
-$ ./client_udp <address>
+$ out/server_udp
+$ out/client_udp <address>
+```
+```bash
+$ out/server_tcp
+$ out/client_tcp <address>
 ```
